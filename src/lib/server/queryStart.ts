@@ -1,22 +1,5 @@
 import prisma from './prisma';
 
-export async function productos() {
-	const productos = await prisma.productos.findMany();
-
-	prisma.$disconnect();
-
-	return productos;
-}
-
-export async function productos_por_categoria(categoria: string) {
-	const productos = await prisma.productos.findMany({
-		where: {
-			name: categoria
-		}
-	});
-	return productos;
-}
-
 export async function crearCategoriaRaiz(categoria: string) {
 	const newCategory = await prisma.categorias.create({
 		data: {
@@ -39,7 +22,6 @@ export async function crearCategoriaRaiz(categoria: string) {
 }
 
 export async function prueba(categoriaConsulta:string) {
-	console.time('query');
 	const users = await prisma.$queryRaw`
 	SELECT p.name
 	FROM productos p
@@ -54,6 +36,5 @@ export async function prueba(categoriaConsulta:string) {
 `;
 
 	prisma.$disconnect();
-	console.timeEnd('query');
 	return users;
 }
