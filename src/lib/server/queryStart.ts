@@ -38,23 +38,6 @@ export async function crearCategoriaRaiz(categoria: string) {
 	return newCategory;
 }
 
-export async function obtenerRelacionesCategorias(idCategoria: string) {
-	const categorias = await prisma.categorias.findMany({
-		where: {
-			id: idCategoria
-		},
-		select: {
-			id: true,
-			name: true,
-			root: { select: { hijo: true } },
-			padre: { select: { hijo: true } },
-			hijo: { select: { hijo: true } }
-		}
-	});
-	console.log(categorias);
-	return categorias;
-}
-
 export async function prueba(categoriaConsulta:string) {
 	console.time('query');
 	const users = await prisma.$queryRaw`
