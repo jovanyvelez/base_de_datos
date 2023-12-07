@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,3 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+model categorias {
+  id                                                         String              @id @default(uuid())
+  name                                                       String
+
+  //relaciones
+  productos productos[]
+  root   categoriasclosure[] @relation("roots")
+  padre  categoriasclosure[] @relation("padres")
+  hijo categoriasclosure[] @relation("hijos")
+}
+
+
+
+model categoriasclosure {
+  id                                                  String                 @id @default(uuid())
+  root                                                String
+  padre                                               String
+  hijo                                                String
+  depth                                               Int
+
+  //relaciones
+  categorias_root   categorias @relation("roots", fields: [root], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  categorias_padre categorias @relation("padres", fields: [padre], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  categorias_hijo categorias @relation("hijos", fields: [hijo], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+
+
+model productos {
+  id        String              @id @default(uuid())
+  name      String
+  categoriaId String
+  categoria categorias @relation(fields: [categoriaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+}
