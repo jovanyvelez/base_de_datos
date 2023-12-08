@@ -21,7 +21,7 @@ export async function crearCategoriaRaiz(categoria: string) {
 	return newCategory;
 }
 
-export async function prueba(categoriaConsulta:string) {
+export async function productosPorCategoria(categoriaConsulta:string) {
 	const users = await prisma.$queryRaw`
 	SELECT p.name
 	FROM productos p
@@ -37,4 +37,16 @@ export async function prueba(categoriaConsulta:string) {
 
 	prisma.$disconnect();
 	return users;
+}
+
+export async function categoriasRaices() {
+	const raices = await prisma.$queryRaw`
+	SELECT c.name
+		FROM categoriasclosure cc
+		JOIN categorias c ON cc.hijo = c.id
+		WHERE cc.padre = cc.root and cc.hijo = cc.root
+`;
+
+	prisma.$disconnect();
+	return raices;
 }

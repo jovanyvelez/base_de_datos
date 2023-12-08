@@ -1,19 +1,21 @@
 <script lang="ts">
-    import type { PageData } from './$types';
-    import { superForm } from 'sveltekit-superforms/client';
+	import type { PageData } from './$types';
+	
+	export let data: PageData;
 
-    export let data: PageData;
-    const {form} = superForm(data.form)
 </script>
 
-<p>{JSON.stringify(data.result,null,2)}</p>
 
-<form action="" method="post">
+<h1>Bienvenido</h1>
 
-    <label>
-        Nombre de categoria
-        <input type="text" name="name" bind:value={$form.name}/>
-    </label>
+<p>
+	three:
+	{#await data.test}
+		Loading...
+	{:then value}
+		{JSON.stringify(value, null, 2)} 
+	{:catch error}
+		{error.message}
+	{/await}
+</p>
 
-    <button>Submit</button>
-</form>
