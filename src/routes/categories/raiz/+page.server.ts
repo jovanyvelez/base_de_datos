@@ -11,7 +11,7 @@ export const load = () => {
  		
         /*root: categoriasRaices(),*/
         form: superValidate(categorySchema),
-        test: productosPorCategoria("0cf7e380-fb4f-4325-a787-213c913f46a6")
+        test: productosPorCategoria("f48358e3-6550-4b46-bd9d-5b93fc41adde")
 	};
 };
 

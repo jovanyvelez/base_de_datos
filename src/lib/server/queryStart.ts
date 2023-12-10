@@ -25,7 +25,7 @@ export async function productosPorCategoria(categoriaConsulta:string) {
 	const users = await prisma.$queryRaw`
 	SELECT p.name
 	FROM productos p
-	WHERE p."categoriaId" IN (
+	WHERE p."categoria_id" IN (
 		SELECT c.id
 		FROM categoriasclosure cc
 		JOIN categorias c ON cc.hijo = c.id

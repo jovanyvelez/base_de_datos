@@ -7,7 +7,7 @@
 
 
 <h1>Bienenido, {data.username}</h1>
-<p>Visit <a href="/categories/raiz">kit.svelte.dev</a> to try our service</p>
+<p>Visit <a href="/categories/raiz">Ver los productos</a> to try our service</p>
 
 <p>
 	one: {data.one}
