@@ -18,6 +18,6 @@ export const load = async ({locals}) => {
 			}),
 		},
 		userId: session.user.userId,
-		username: session.user.username
+		username: session.user.email
 	};
 };

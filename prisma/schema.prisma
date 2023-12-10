@@ -11,6 +11,8 @@ datasource db {
 model categorias {
   id                                                         String              @id @default(uuid())
   name                                                       String
+  created_at            DateTime               @default(now())
+  updated_at            DateTime
 
   //relaciones
   productos productos[]
@@ -37,13 +39,52 @@ model categoriasclosure {
 
 
 model productos {
-  id        String              @id @default(uuid())
-  name      String
-  categoriaId String
-  categoria categorias @relation(fields: [categoriaId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
+  id                    String              @id @default(uuid())
+  name                  String
+  description           String
+  marca                 String
+  codigo                String              @unique
+  ean_code              String?             @unique
+  quantity              Float
+  tax                   Float               @default(0.0)
+  promo                 Boolean
+  new                   Boolean
+  active                Boolean
+  created_at            DateTime            @default(now())
+  updated_at            DateTime  
+  categoria_id          String
+  categoria categorias @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  images                image[]
+  prices                 price[]
 }
 
+model image {
+  id            String   @id
+  name          String
+  public_id     String
+  secure_url    String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime
+  product_id    String
+  product       productos  @relation(fields: [product_id], references: [id])
+}
+
+model price {
+  id        String   @id
+  price1    Float
+  price2    Float?
+  price3    Float?
+  price4    Float?
+  price5    Float?
+  price6    Float?
+  created_at DateTime @default(now())
+  updated_at DateTime
+  product_id String
+  product   productos  @relation(fields: [product_id], references: [id])
+}
+
+
+//Modelos para la autenticacion
 
 model user {
   id           String    @id @unique

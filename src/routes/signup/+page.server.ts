@@ -1,4 +1,5 @@
 import { auth } from '$lib/server/lucia';
+import { LuciaError } from 'lucia';
 import { fail, redirect } from '@sveltejs/kit';
 
 
@@ -30,10 +31,15 @@ export const actions = {
 			});
 			locals.auth.setSession(session); // set session cookie
 		} catch (e) {
-
-			return fail(500, {
-				message: "hubo un error"
-			});
+			if (e instanceof LuciaError && e.message === "AUTH_DUPLICATE_KEY_ID") {
+				return fail(500, {
+					message: "Usuario ya existe"
+				});
+			}else{
+				return fail(500, {
+					message: "hubo un error"
+				});
+			}
 		}
 		// redirect to
 		// make sure you don't throw inside a try/catch block!
