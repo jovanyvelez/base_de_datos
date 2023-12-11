@@ -7,90 +7,78 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model categorias {
-  id                                                         String              @id @default(uuid())
-  name                                                       String
-  created_at            DateTime               @default(now())
-  updated_at            DateTime
-
-  //relaciones
-  productos productos[]
-  root   categoriasclosure[] @relation("roots")
-  padre  categoriasclosure[] @relation("padres")
-  hijo categoriasclosure[] @relation("hijos")
+  id         String              @id @default(uuid())
+  name       String
+  created_at DateTime            @default(now())
+  updated_at DateTime
+  hijo       categoriasclosure[] @relation("hijos")
+  padre      categoriasclosure[] @relation("padres")
+  root       categoriasclosure[] @relation("roots")
+  productos  productos[]
 }
-
-
 
 model categoriasclosure {
-  id                                                  String                 @id @default(uuid())
-  root                                                String
-  padre                                               String
-  hijo                                                String
-  depth                                               Int
-
-  //relaciones
-  categorias_root   categorias @relation("roots", fields: [root], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id               String     @id @default(uuid())
+  root             String
+  padre            String
+  hijo             String
+  depth            Int
+  categorias_hijo  categorias @relation("hijos", fields: [hijo], references: [id], onDelete: NoAction, onUpdate: NoAction)
   categorias_padre categorias @relation("padres", fields: [padre], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  categorias_hijo categorias @relation("hijos", fields: [hijo], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  categorias_root  categorias @relation("roots", fields: [root], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-
-
 model productos {
-  id                    String              @id @default(uuid())
-  name                  String
-  description           String
-  marca                 String
-  codigo                String              @unique
-  ean_code              String?             @unique
-  quantity              Float
-  tax                   Float               @default(0.0)
-  promo                 Boolean
-  new                   Boolean
-  active                Boolean
-  created_at            DateTime            @default(now())
-  updated_at            DateTime  
-  categoria_id          String
-  categoria categorias @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  images                image[]
-  prices                 price[]
+  id           String     @id @default(uuid())
+  name         String
+  active       Boolean
+  categoria_id String
+  codigo       String     @unique
+  created_at   DateTime   @default(now())
+  description  String
+  ean_code     String?    @unique
+  marca        String
+  new          Boolean
+  promo        Boolean
+  quantity     Float
+  tax          Float      @default(0.0)
+  updated_at   DateTime
+  images       image[]
+  prices       price[]
+  categoria    categorias @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model image {
-  id            String   @id
-  name          String
-  public_id     String
-  secure_url    String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime
-  product_id    String
-  product       productos  @relation(fields: [product_id], references: [id])
+  id         String    @id @default(uuid())
+  name       opciones_producto    @default(main)
+  public_id  String
+  secure_url String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+  product_id String
+  product    productos @relation(fields: [product_id], references: [id])
+
+  @@unique([product_id, name], map: "asignacion_imagen")
 }
 
 model price {
-  id        String   @id
-  price1    Float
-  price2    Float?
-  price3    Float?
-  price4    Float?
-  price5    Float?
-  price6    Float?
-  created_at DateTime @default(now())
+  id         String    @id @default(uuid())
+  price      Float
+  created_at DateTime  @default(now())
   updated_at DateTime
   product_id String
-  product   productos  @relation(fields: [product_id], references: [id])
+  name       opciones_producto    @default(main)
+  product    productos @relation(fields: [product_id], references: [id])
+
+  @@unique([product_id, name], map: "asignacion_precio")
 }
 
-
-//Modelos para la autenticacion
-
 model user {
-  id           String    @id @unique
-  email     String
-  auth_session user_session[]
+  id           String         @id @unique
+  email        String
   key          user_key[]
+  auth_session user_session[]
 }
 
 model user_session {
@@ -98,7 +86,7 @@ model user_session {
   user_id        String
   active_expires BigInt
   idle_expires   BigInt
-  user           user   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user           user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id])
 }
@@ -107,7 +95,17 @@ model user_key {
   id              String  @id @unique
   hashed_password String?
   user_id         String
-  user            user    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user            user    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id])
+}
+
+
+enum opciones_producto {
+  main
+  uno
+  dos
+  tres
+  cuatro
+  cinco
 }
