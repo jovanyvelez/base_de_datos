@@ -22,21 +22,26 @@ export async function crearCategoriaRaiz(categoria: string) {
 }
 
 export async function productosPorCategoria(categoriaConsulta:string) {
-	const users = await prisma.$queryRaw`
-	SELECT p.name
-	FROM productos p
-	WHERE p."categoria_id" IN (
-		SELECT c.id
-		FROM categoriasclosure cc
-		JOIN categorias c ON cc.hijo = c.id
-		WHERE (cc.root = ${categoriaConsulta} or 
-				cc.padre = ${categoriaConsulta} or 
-				cc.hijo = ${categoriaConsulta})
+	const productos = await prisma.$queryRaw`
+	SELECT productos.id, productos.name, price.name as price_type, price.price, image.name as image_type, image.secure_url
+	FROM productos
+	JOIN price ON productos.id = price.product_id
+	JOIN image on productos.id = image.product_id
+	WHERE productos."categoria_id" IN (
+		SELECT categorias.id
+		FROM categoriasclosure
+		JOIN categorias ON categoriasclosure.hijo = categorias.id
+		WHERE (categoriasclosure.root = ${categoriaConsulta} or 
+				categoriasclosure.padre = ${categoriaConsulta} or 
+				categoriasclosure.hijo = ${categoriaConsulta})
 	)
+	ORDER BY random()
+	LIMIT 4
 `;
 
+	console.log(productos)
 	prisma.$disconnect();
-	return users;
+	return productos;
 }
 
 export async function categoriasRaices() {
@@ -49,4 +54,26 @@ export async function categoriasRaices() {
 
 	prisma.$disconnect();
 	return raices;
+}
+
+export async function categoriasPrincipales() {
+	const productos = await prisma.$queryRaw`
+	SELECT categorias.name as categoria, categorias.id , productos.id as product_id, productos.name, price.name as price_type, price.price, image.name as image_type, image.secure_url
+	FROM productos
+	JOIN price ON productos.id = price.product_id
+	JOIN image on productos.id = image.product_id
+	JOIN categorias on productos."categoria_id" = categorias.id
+	WHERE productos."categoria_id" IN (
+		SELECT categorias.id
+		FROM categoriasclosure
+		JOIN categorias ON categoriasclosure.hijo = categorias.id
+		WHERE (categoriasclosure.root = categoriasclosure.padre and 
+				categoriasclosure.padre = categoriasclosure.hijo )
+	)
+	ORDER BY random()
+	LIMIT 4
+`;
+
+	prisma.$disconnect();
+	return productos;
 }

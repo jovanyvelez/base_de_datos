@@ -1,17 +1,17 @@
 import { z } from 'zod';
 import { superValidate } from 'sveltekit-superforms/server';
-import { categoriasRaices, crearCategoriaRaiz, productosPorCategoria} from '$lib/server/queryStart.js';
+import { categoriasPrincipales,  crearCategoriaRaiz} from '$lib/server/queryStart.js';
 const categorySchema = z.object({
 	id: z.string().min(1).optional(),
 	name: z.string().min(4)
 });
 
-export const load = () => {
+export const load = async() => {
 	return {
  		
         /*root: categoriasRaices(),*/
         form: superValidate(categorySchema),
-        test: productosPorCategoria("f48358e3-6550-4b46-bd9d-5b93fc41adde")
+        test: categoriasPrincipales()//productosPorCategoria("f48358e3-6550-4b46-bd9d-5b93fc41adde")
 	};
 };
 
