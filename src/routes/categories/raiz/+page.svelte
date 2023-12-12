@@ -7,7 +7,7 @@
 
 
 <h1>Bienvenido</h1>
-
+<a href="/">Back</a>
 <p>
 	Categoria:
 	{#await data.test}
