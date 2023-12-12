@@ -15,16 +15,7 @@
 <p>
 	two: {data.two}
 </p>
-<p>
-	three:
-	{#await data.root}
-		Loading...
-	{:then value}
-		{JSON.stringify(value, null, 2)} 
-	{:catch error}
-		{error.message}
-	{/await}
-</p>
+
 
 <p>
 	four:
