@@ -44,17 +44,7 @@ export async function productosPorCategoria(categoriaConsulta:string) {
 	return productos;
 }
 
-export async function categoriasRaices() {
-	const raices = await prisma.$queryRaw`
-	SELECT c.name
-		FROM categoriasclosure cc
-		JOIN categorias c ON cc.hijo = c.id
-		WHERE cc.padre = cc.root and cc.hijo = cc.root
-`;
 
-	prisma.$disconnect();
-	return raices;
-}
 
 export async function categoriasPrincipales() {
 	const productos = await prisma.$queryRaw`
