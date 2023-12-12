@@ -16,6 +16,7 @@ model categorias {
   padre      categoriasclosure[] @relation("padres")
   root       categoriasclosure[] @relation("roots")
   productos  productos[]
+  imagenes    image[]
 }
 
 model categoriasclosure {
@@ -55,10 +56,11 @@ model image {
   secure_url String
   created_at DateTime          @default(now())
   updated_at DateTime
-  product_id String
+  product_id String?
+  categoria_id String?
   name       opciones_producto @default(main)
-  product    productos         @relation(fields: [product_id], references: [id])
-
+  product    productos?         @relation(fields: [product_id], references: [id])
+  categoria  categorias?        @relation(fields: [categoria_id], references: [id])
   @@unique([product_id, name], map: "asignacion_imagen")
 }
 
