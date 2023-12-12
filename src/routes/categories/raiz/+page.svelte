@@ -6,7 +6,7 @@
 
 <h1>Bienvenido</h1>
 <a href="/">Back</a>
-<p>
+<div>
 	{#await data.test}
 		Loading...
 	{:then value}
@@ -24,13 +24,13 @@
 	{:catch error}
 		{error.message}
 	{/await}
-</p>
+</div>
 
 <a href="/">Back</a>
 
 <style>
 	
-	h6 {
+	h6,a,h1 {
 		text-align: center;
 	}
 	.bg {
@@ -38,8 +38,11 @@
 		justify-content: center;
 		flex-wrap: wrap;
 		align-items: center;
-		height: 100vh;
 		margin-right: 5px;
 		padding: 5px;
+	}
+
+	a{
+		display:block;
 	}
 </style>
