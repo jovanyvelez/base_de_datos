@@ -50,26 +50,26 @@ model productos {
 }
 
 model image {
-  id         String    @id @default(uuid())
-  name       opciones_producto    @default(main)
+  id         String            @id @default(uuid())
+  name       opciones_producto @default(main)
   public_id  String
   secure_url String
-  createdAt  DateTime  @default(now())
+  createdAt  DateTime          @default(now())
   updatedAt  DateTime
   product_id String
-  product    productos @relation(fields: [product_id], references: [id])
+  product    productos         @relation(fields: [product_id], references: [id])
 
   @@unique([product_id, name], map: "asignacion_imagen")
 }
 
 model price {
-  id         String    @id @default(uuid())
+  id         String            @id @default(uuid())
   price      Float
-  created_at DateTime  @default(now())
+  created_at DateTime          @default(now())
   updated_at DateTime
   product_id String
-  name       opciones_producto    @default(main)
-  product    productos @relation(fields: [product_id], references: [id])
+  name       opciones_producto @default(main)
+  product    productos         @relation(fields: [product_id], references: [id])
 
   @@unique([product_id, name], map: "asignacion_precio")
 }
@@ -99,7 +99,6 @@ model user_key {
 
   @@index([user_id])
 }
-
 
 enum opciones_producto {
   main
