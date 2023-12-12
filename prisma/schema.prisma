@@ -51,12 +51,12 @@ model productos {
 
 model image {
   id         String            @id @default(uuid())
-  name       opciones_producto @default(main)
   public_id  String
   secure_url String
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime
+  created_at DateTime          @default(now())
+  updated_at DateTime
   product_id String
+  name       opciones_producto @default(main)
   product    productos         @relation(fields: [product_id], references: [id])
 
   @@unique([product_id, name], map: "asignacion_imagen")
