@@ -76,6 +76,21 @@ model price {
   @@unique([product_id, name], map: "asignacion_precio")
 }
 
+model ciudades {
+  id             String        @id @default(uuid())
+  ciudad         String
+  codigo         String
+  departamento_id String
+  departamentos  departamentos @relation(fields: [departamento_id], references: [id])
+}
+
+model departamentos {
+  id           String     @id @default(uuid())
+  departamento String
+  codigo       String
+  ciudades     ciudades[]
+}
+
 model user {
   id           String         @id @unique
   email        String
