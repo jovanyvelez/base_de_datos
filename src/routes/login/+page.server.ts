@@ -52,6 +52,7 @@ export const actions: Actions = {
 		}
 		// redirect to
 		// make sure you don't throw inside a try/catch block!
+		
 		throw redirect(302, '/');
 	}
 };
